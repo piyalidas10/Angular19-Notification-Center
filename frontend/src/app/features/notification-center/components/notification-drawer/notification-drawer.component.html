@@ -1,0 +1,44 @@
+@if (service.isDrawerOpen()) {
+  <div class="drawer-overlay" @fade (click)="onClose()"></div>
+  <div class="drawer" @slideIn>
+    <div class="drawer-header">
+      <h2>
+        Notifications
+        <span class="count-badge">{{ service.totalCount() }}</span>
+      </h2>
+      <button class="close-btn" (click)="onClose()">✕</button>
+    </div>
+
+    <div class="drawer-actions">
+      <div class="action-group">
+        @if (service.selectedIds().size > 0) {
+          <button class="btn btn-secondary" (click)="onClearSelection()">
+            Clear Selection
+          </button>
+          <button class="btn btn-danger" (click)="onDeleteSelected()">
+            Delete Selected ({{ service.selectedIds().size }})
+          </button>
+        } @else {
+          <button class="btn btn-secondary" (click)="onSelectAll()">
+            Select All
+          </button>
+        }
+      </div>
+      <div class="action-group">
+        <button class="btn btn-primary" (click)="onMarkAllRead()" [disabled]="service.unreadCount() === 0">
+          Mark All Read
+        </button>
+        <button class="btn btn-danger" (click)="onDeleteAll()">
+          Delete All
+        </button>
+      </div>
+    </div>
+
+    <app-notification-search />
+    <app-notification-filter />
+
+    <div class="drawer-content">
+      <app-notification-list />
+    </div>
+  </div>
+}

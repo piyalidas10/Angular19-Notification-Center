@@ -1,0 +1,13 @@
+<div class="filter-bar">
+  <div class="filter-chips">
+    @for (filter of filters; track filter.value) {
+      <button
+        class="filter-chip"
+        [class.active]="service.activeFilter() === filter.value"
+        (click)="onFilterChange(filter.value)">
+        <span class="icon">{{ filter.icon }}</span>
+        <span>{{ filter.label }}</span>
+      </button>
+    }
+  </div>
+</div>

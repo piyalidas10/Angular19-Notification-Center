@@ -1,0 +1,127 @@
+<div class="dashboard">
+  <!-- Header -->
+  <header class="dash-header">
+    <div class="header-left">
+      <h1>🔔 Notification Center</h1>
+      <span class="subtitle">Real-time notification management</span>
+    </div>
+    <div class="header-right">
+      <app-notification-bell />
+    </div>
+  </header>
+
+  <!-- Stats Row -->
+  <div class="stats-grid">
+    <div class="stat-card stat-total">
+      <div class="stat-icon">📋</div>
+      <div class="stat-body">
+        <div class="stat-value">{{ service.stats().total }}</div>
+        <div class="stat-label">Total</div>
+      </div>
+    </div>
+    <div class="stat-card stat-unread" (click)="openDrawer()">
+      <div class="stat-icon">🔵</div>
+      <div class="stat-body">
+        <div class="stat-value">{{ service.unreadCount() }}</div>
+        <div class="stat-label">Unread</div>
+      </div>
+    </div>
+    <div class="stat-card stat-critical">
+      <div class="stat-icon">🚨</div>
+      <div class="stat-body">
+        <div class="stat-value">{{ service.criticalCount() }}</div>
+        <div class="stat-label">Critical</div>
+      </div>
+    </div>
+    <div class="stat-card stat-high">
+      <div class="stat-icon">⚠️</div>
+      <div class="stat-body">
+        <div class="stat-value">{{ service.stats().high }}</div>
+        <div class="stat-label">High Priority</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main content area -->
+  <div class="dashboard-main">
+    <!-- Category Breakdown -->
+    <section class="section">
+      <h2 class="section-title">By Category</h2>
+      <div class="category-grid">
+        @for (item of categoryStats(); track item.key) {
+          <div class="category-card" [style.border-left-color]="item.config.color">
+            <span class="cat-icon">{{ item.config.icon }}</span>
+            <div class="cat-info">
+              <span class="cat-label">{{ item.config.label }}</span>
+              <span class="cat-count" [style.color]="item.config.color">{{ item.count }}</span>
+            </div>
+          </div>
+        }
+      </div>
+    </section>
+
+    <!-- Recent Activity -->
+    <section class="section">
+      <div class="section-header">
+        <h2 class="section-title">Recent Activity</h2>
+        <button class="view-all-btn" (click)="openDrawer()">View All →</button>
+      </div>
+      <div class="activity-list">
+        @if (recentActivity().length === 0) {
+          <p class="empty-text">No recent activity</p>
+        } @else {
+          @for (notification of recentActivity(); track notification.id) {
+            <div class="activity-item" [class.unread]="!notification.read">
+              <span class="activity-icon">{{ notification.icon }}</span>
+              <div class="activity-content">
+                <div class="activity-header">
+                  <span class="activity-title">{{ notification.title }}</span>
+                  <span
+                    class="priority-dot"
+                    [style.background-color]="getPriorityColor(notification.priority)"
+                    [title]="notification.priority"
+                  ></span>
+                </div>
+                <span class="activity-time">{{ notification.timestamp | timeAgo }}</span>
+              </div>
+              @if (!notification.read) {
+                <span class="unread-indicator">NEW</span>
+              }
+            </div>
+          }
+        }
+      </div>
+    </section>
+
+    <!-- Live Feed Section -->
+    <section class="section section-wide">
+      <h2 class="section-title">Live Notifications Feed</h2>
+      <div class="live-info">
+        <div class="live-badge">
+          <span class="live-dot"></span>
+          <span>LIVE</span>
+        </div>
+        <p>WebSocket connected. New notifications appear automatically every 8-15 seconds from the backend.</p>
+      </div>
+      <div class="quick-actions">
+        <button class="action-btn primary" (click)="openDrawer()">
+          Open Notification Center
+        </button>
+        <button
+          class="action-btn secondary"
+          (click)="service.markAllAsRead()"
+          [disabled]="service.unreadCount() === 0"
+        >
+          Mark All as Read ({{ service.unreadCount() }})
+        </button>
+        <button class="action-btn danger" (click)="service.deleteAll()">
+          Clear All
+        </button>
+      </div>
+    </section>
+  </div>
+</div>
+
+<!-- Drawer & Toasts (rendered at root level for correct z-index) -->
+<app-notification-drawer />
+<app-toast />

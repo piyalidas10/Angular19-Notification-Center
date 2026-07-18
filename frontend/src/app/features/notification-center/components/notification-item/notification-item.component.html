@@ -1,0 +1,41 @@
+<div
+  class="notification-item"
+  [class.unread]="!notification.read"
+  [class.critical]="notification.priority === 'critical'"
+  [appPriorityBorder]="notification.priority"
+  (click)="onMarkRead()">
+  
+  <div class="checkbox-container">
+    <input
+      type="checkbox"
+      [checked]="selected"
+      (click)="onToggleSelect($event)"
+      (change)="onToggleSelect($event)"
+    />
+  </div>
+
+  <div class="icon" [style.color]="getCategoryConfig().color">
+    {{ notification.icon }}
+  </div>
+
+  <div class="content">
+    <div class="header">
+      <h4 class="title">{{ notification.title }}</h4>
+      <span class="time">{{ notification.timestamp | timeAgo }}</span>
+    </div>
+    <p class="description">{{ notification.description }}</p>
+    <div class="footer">
+      <span class="category-badge" [style.background-color]="getCategoryConfig().color">
+        {{ getCategoryConfig().label }}
+      </span>
+      <span class="priority-badge" [ngClass]="getPriorityConfig().badgeClass">
+        {{ getPriorityConfig().label }}
+      </span>
+      <span class="sender">{{ notification.sender }}</span>
+    </div>
+  </div>
+
+  <button class="delete-btn" (click)="onDelete($event)" title="Delete">
+    ✕
+  </button>
+</div>

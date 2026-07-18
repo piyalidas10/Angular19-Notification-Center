@@ -1,0 +1,150 @@
+.notification-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 16px;
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+  position: relative;
+
+  &:hover {
+    background: #f9fafb;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  }
+
+  &.unread {
+    background: #eff6ff;
+    border-left-width: 4px;
+
+    .title {
+      font-weight: 700;
+    }
+
+    &::before {
+      content: '';
+      position: absolute;
+      left: 8px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 8px;
+      height: 8px;
+      background: #3b82f6;
+      border-radius: 50%;
+    }
+  }
+
+  &.critical {
+    border-color: #ef4444;
+    background: #fef2f2;
+  }
+}
+
+.checkbox-container {
+  margin-top: 4px;
+
+  input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+  }
+}
+
+.icon {
+  font-size: 28px;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.content {
+  flex: 1;
+  min-width: 0;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 6px;
+}
+
+.title {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 600;
+  color: #1f2328;
+}
+
+.time {
+  font-size: 12px;
+  color: #57606a;
+  white-space: nowrap;
+  margin-left: 8px;
+}
+
+.description {
+  margin: 0 0 10px;
+  font-size: 13px;
+  color: #57606a;
+  line-height: 1.5;
+}
+
+.footer {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.category-badge,
+.priority-badge {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 3px 8px;
+  border-radius: 4px;
+  color: white;
+  text-transform: uppercase;
+}
+
+.priority-badge {
+  &.priority-low {
+    background: #6b7280;
+  }
+
+  &.priority-medium {
+    background: #f59e0b;
+  }
+
+  &.priority-high {
+    background: #f97316;
+  }
+
+  &.priority-critical {
+    background: #ef4444;
+  }
+}
+
+.sender {
+  font-size: 12px;
+  color: #6b7280;
+  font-style: italic;
+}
+
+.delete-btn {
+  background: transparent;
+  border: none;
+  color: #9ca3af;
+  font-size: 18px;
+  cursor: pointer;
+  padding: 4px;
+  line-height: 1;
+  border-radius: 4px;
+  transition: all 0.2s;
+
+  &:hover {
+    background: #fecaca;
+    color: #ef4444;
+  }
+}

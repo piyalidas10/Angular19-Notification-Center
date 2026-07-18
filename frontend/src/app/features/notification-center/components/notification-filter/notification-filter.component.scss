@@ -1,0 +1,40 @@
+.filter-bar {
+  padding: 16px 0;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.filter-chips {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.filter-chip {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  color: #57606a;
+
+  .icon {
+    font-size: 16px;
+  }
+
+  &:hover {
+    background: #f7f8fa;
+    border-color: #3b82f6;
+  }
+
+  &.active {
+    background: #3b82f6;
+    color: white;
+    border-color: #3b82f6;
+  }
+}

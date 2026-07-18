@@ -1,0 +1,30 @@
+<div class="notification-list">
+  @if (service.isLoading() && service.notifications().length === 0) {
+    <div class="loading">Loading notifications...</div>
+  } @else if (service.filteredNotifications().length === 0) {
+    <div class="empty">
+      <span class="empty-icon">📭</span>
+      <p>No notifications found</p>
+    </div>
+  } @else {
+    <div class="list-container">
+      @for (notification of service.filteredNotifications(); track notification.id) {
+        <app-notification-item
+          [notification]="notification"
+          [selected]="isSelected(notification.id)"
+          (markRead)="onMarkRead($event)"
+          (delete)="onDelete($event)"
+          (toggleSelect)="onToggleSelect($event)"
+        />
+      }
+    </div>
+    
+    @if (service.currentPage() < service.totalPages()) {
+      <div class="load-more">
+        <button (click)="onLoadMore()" [disabled]="service.isLoading()">
+          {{ service.isLoading() ? 'Loading...' : 'Load More' }}
+        </button>
+      </div>
+    }
+  }
+</div>
