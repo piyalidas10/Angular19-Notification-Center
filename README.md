@@ -20,6 +20,8 @@ A production-ready notification center built with **Angular 19** (Signals, Stand
 - 8 notification **categories** with unique colors and icons
 - 4 **priority levels** with visual indicators
 
+<img src="img/Angular 19 notification system diagram.png" width="90%" />
+
 ## Tech Stack
 
 | Layer | Technology |
