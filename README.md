@@ -114,8 +114,168 @@ src/app/
             ├── notification-drawer/
             └── toast/
 ```
+## Overall System Architecture
+```
+Angular 19
+    │
+    ├── HTTP Client
+    ├── Signals Store
+    ├── Notification Service
+    ├── WebSocket Service
+    │
+    ▼
+Node.js + Express
+    │
+    ├── REST API
+    ├── Notification Service
+    ├── Socket.IO Server
+    └── Data Store
+```
 
-## Socket End-to-End Lifecycle
+## Complete End-to-End Sequence Diagram
+```
+User
+ │
+ ▼
+Angular Component
+ │
+ ▼
+Notification Service
+ │
+ ├────────HTTP────────► Express Route
+ │                      │
+ │                      ▼
+ │               Notification Service
+ │                      │
+ │                      ▼
+ │               Update Data
+ │                      │
+ │                      ▼
+ │                io.emit(...)
+ │                      │
+ ▼                      ▼
+HTTP Response     Socket.IO Broadcast
+ │                      │
+ ▼                      ▼
+Signal Store ◄──────────┘
+ │
+ ▼
+Notification Component
+ │
+ ▼
+Updated UI
+```
+
+## Application Startup Flow
+```
+Browser
+   │
+Angular Bootstrap
+   │
+App Component
+   │
+Load Notifications
+   │
+HTTP GET /notifications
+   │
+Backend
+   │
+Return Data
+   │
+Signals Updated
+   │
+UI Rendered
+```
+
+## Notification 
+### Notification Creation Flow
+```
+User Click
+     │
+     ▼
+Angular Component
+     │
+NotificationService
+     │
+HTTP POST
+     │
+Express Route
+     │
+Notification Controller
+     │
+Notification Service
+     │
+Store Notification
+     │
+io.emit("notification:new")
+     │
+────────────┬────────────
+            │
+     All Connected Clients
+            │
+WebsocketService.listen()
+            │
+Signals Store
+            │
+Notification List Updated
+```
+
+### Notification - Mark as Read Flow
+```
+User
+ │
+ ▼
+PUT /read/:id
+ │
+Backend
+ │
+Update Notification
+ │
+io.emit("notification:read")
+ │
+Angular WebSocket
+ │
+Signal Store
+ │
+UI Updated
+```
+
+### Notification - Mark All Read Flow
+User
+ │
+ ▼
+PUT /read-all
+ │
+Backend
+ │
+markAllAsRead()
+ │
+io.emit("notification:read-all")
+ │
+Every Browser
+ │
+Notification Store
+ │
+UI Refresh
+
+### Notification - Delete Notification Flow
+Delete Button
+      │
+HTTP DELETE
+      │
+Express
+      │
+Delete Service
+      │
+io.emit("notification:delete")
+      │
+Angular
+      │
+Remove Signal
+      │
+UI Updated
+
+## WebSocket End-to-End Lifecycle
 ```
 Angular App
      │
@@ -147,6 +307,62 @@ socket created
           Angular UI updates instantly
 ```
 This pattern—client emits an event to the server, the server processes it, and then broadcasts a result to all interested clients—is the core communication model used in many real-time applications such as chat systems, live dashboards, multiplayer games, collaborative editors, and notification services.
+
+## WebSocket Lifecycle
+```
+Angular
+     │
+io(environment.wsUrl)
+     │
+───────────────
+Socket.IO Server
+───────────────
+     │
+connection
+     │
+socket.id
+     │
+notification:new
+notification:update
+notification:delete
+notification:read
+notification:read-all
+     │
+disconnect
+```
+
+## Frontend Folder Workflow
+```
+Component
+      │
+      ▼
+Facade / Notification Service
+      │
+      ├────────HTTP─────────► REST API
+      │
+      └────────Socket────────► WebSocket Service
+                              │
+                              ▼
+                        Signal Store
+                              │
+                              ▼
+                             UI
+```
+
+## Backend Request Flow
+```
+Route
+ │
+Controller
+ │
+Business Logic
+ │
+Repository / Mock Data
+ │
+Socket.IO Broadcast
+ │
+HTTP Response
+```
 
 
 ### Angular 19 Signals Pattern
