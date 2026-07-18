@@ -2,6 +2,9 @@
 
 Two WebSocket connections are visible in the browser DevTools. They serve **completely different purposes**.
 
+> frontend\src\app\core\services\websocket.service.ts
+> This service is an Angular WebSocket service that uses Socket.IO to maintain a real-time connection with a backend server. Instead of opening and closing connections in every component, the application creates one shared connection and exposes it through RxJS Observables.
+
 ---
 
 ## Connection 1 — Application Socket.io
@@ -88,6 +91,37 @@ Browser
         webpack-dev-server HMR client
         Injected by Angular CLI (ng serve only)
         Messages: file-change → reload / patch
+```
+
+---
+
+## Overall Flow
+
+```
+                Angular App
+                     │
+                     ▼
+         WebsocketService (Singleton)
+                     │
+             io(environment.wsUrl)
+                     │
+             Socket.IO Connection
+                     │
+      ┌──────────────┼──────────────┐
+      ▼              ▼              ▼
+ notification:new  update        delete
+      │              │              │
+      ▼              ▼              ▼
+   listen<T>()   listen<T>()   listen<T>()
+      │
+      ▼
+Observable<Notification>
+      │
+      ▼
+Angular Component subscribes
+      │
+      ▼
+UI updates instantly
 ```
 
 ---

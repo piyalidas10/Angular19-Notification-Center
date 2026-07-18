@@ -2,6 +2,8 @@
 
 A production-ready notification center built with **Angular 19** (Signals, Standalone Components, Control Flow) + **Node.js** (Express, Socket.IO, TypeScript).
 
+<img src="img/run_application.png" width="90%" />
+
 ## Features
 
 - 🔔 **Real-time notifications** via WebSocket (Socket.IO)
@@ -112,6 +114,40 @@ src/app/
             ├── notification-drawer/
             └── toast/
 ```
+
+## Socket End-to-End Lifecycle
+```
+Angular App
+     │
+     │ io("http://localhost:3000")
+     ▼
+Socket.IO Server
+     │
+     ▼
+connection event
+     │
+     ▼
+socket created
+     │
+     ├────────► disconnect
+     │
+     └────────► notification:request
+                     │
+                     ▼
+      generateRandomNotification()
+                     │
+                     ▼
+      io.emit('notification:new', notification)
+                     │
+         ┌───────────┼───────────┐
+         ▼           ▼           ▼
+     Client A    Client B    Client C
+                     │
+                     ▼
+          Angular UI updates instantly
+```
+This pattern—client emits an event to the server, the server processes it, and then broadcasts a result to all interested clients—is the core communication model used in many real-time applications such as chat systems, live dashboards, multiplayer games, collaborative editors, and notification services.
+
 
 ### Angular 19 Signals Pattern
 

@@ -9,6 +9,9 @@ import {
   markAllAsRead,
 } from '../data/mock-database';
 
+// This file defines the Express router for handling notification-related API endpoints. 
+// It provides routes for listing, creating, updating, and deleting notifications, as well as marking them as read. 
+// The router also emits WebSocket events to notify connected clients of changes in the notification state.
 export const notificationRouter = express.Router();
 
 // GET /notifications - List with pagination
@@ -41,6 +44,7 @@ notificationRouter.post('/', (req: Request, res: Response) => {
 });
 
 // PUT /notifications/read-all
+// This is an Express.js route that marks all notifications as read and then informs all connected WebSocket clients in real time using Socket.IO.
 notificationRouter.put('/read-all', (req: Request, res: Response) => {
   markAllAsRead();
   const io = req.app.get('io');
