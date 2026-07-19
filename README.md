@@ -37,6 +37,34 @@ cd backend && npm run dev     # → http://localhost:3000
 cd frontend && npm start      # → http://localhost:4200
 ```
 
+**When you run Angular application :**
+```
+npm start
+```
+You'll typically have two WebSocket connections:
+```
+Browser
+   │
+   ├──────────────► ws://localhost:4200/?token=...
+   │                 (Vite HMR)
+   │
+   └──────────────► ws://localhost:3000/socket.io/?EIO=4&transport=websocket
+                     (Your Socket.IO server)
+```
+- 4200 → Vite development server
+- 3000 → Node.js + Socket.IO backend
+
+**How to verify**
+```
+Open Chrome DevTools → Network → WS. 
+```
+You'll typically see something like:              
+| URL                                       | Purpose                 |
+| ----------------------------------------- | ----------------------- |
+| `ws://localhost:4200/?token=...`          | ✅ Vite HMR              |
+| `ws://localhost:3000/socket.io/?EIO=4...` | ✅ Your Socket.IO server |
+
+
 ## Quick Start
 
 ### 1. Install dependencies
