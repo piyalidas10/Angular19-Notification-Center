@@ -271,6 +271,7 @@ UI Updated
 ```
 
 ### Notification - Mark All Read Flow
+```
 User
  │
  ▼
@@ -287,8 +288,10 @@ Every Browser
 Notification Store
  │
 UI Refresh
+```
 
 ### Notification - Delete Notification Flow
+```
 Delete Button
       │
 HTTP DELETE
@@ -304,6 +307,7 @@ Angular
 Remove Signal
       │
 UI Updated
+```
 
 ## WebSocket End-to-End Lifecycle
 ```
